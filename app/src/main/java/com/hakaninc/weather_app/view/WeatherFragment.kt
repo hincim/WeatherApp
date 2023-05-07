@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.hakaninc.weather_app.R
 import com.hakaninc.weather_app.databinding.FragmentMainBinding
 import com.hakaninc.weather_app.viewmodel.WeatherViewModel
@@ -47,6 +48,9 @@ class WeatherFragment : Fragment() {
         binding.swipe.setOnRefreshListener {
             viewModel.getData()
             binding.swipe.isRefreshing = false
+        }
+        binding.button.setOnClickListener {
+            Navigation.findNavController(it).navigate(WeatherFragmentDirections.actionMainFragmentToMapsFragment())
         }
 
         binding.weatherError.visibility = View.GONE
