@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.hakaninc.weather_app.WeatherFragment"
+        android:name="com.hakaninc.weather_app.view.WeatherFragment"
         android:label="MainFragment" />
 </navigation>

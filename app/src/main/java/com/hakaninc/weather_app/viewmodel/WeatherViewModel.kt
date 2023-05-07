@@ -1,7 +1,8 @@
-package com.hakaninc.weather_app
+package com.hakaninc.weather_app.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import com.hakaninc.weather_app.api.WeatherApiService
 import com.hakaninc.weather_app.model.Info
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -13,8 +14,8 @@ class WeatherViewModel(application: Application): BaseViewModel(application) {
     private val apiService: WeatherApiService = WeatherApiService()
     private var disposable = CompositeDisposable()
 
-    private val weatherLoading = MutableLiveData<Boolean>()
-    private val weatherError = MutableLiveData<Boolean>()
+    val weatherLoading = MutableLiveData<Boolean>()
+    val weatherError = MutableLiveData<Boolean>()
     val weatherInfo = MutableLiveData<Info>()
 
 
@@ -38,6 +39,7 @@ class WeatherViewModel(application: Application): BaseViewModel(application) {
 
                         weatherInfo.value = t
                         weatherLoading.value = false
+                        weatherError.value = false
                     }
 
                     override fun onError(e: Throwable) {

@@ -1,4 +1,4 @@
-package com.hakaninc.weather_app
+package com.hakaninc.weather_app.api
 
 import com.hakaninc.weather_app.model.Info
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory

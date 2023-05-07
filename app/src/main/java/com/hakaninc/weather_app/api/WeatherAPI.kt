@@ -1,4 +1,4 @@
-package com.hakaninc.weather_app
+package com.hakaninc.weather_app.api
 
 import com.hakaninc.weather_app.model.Info
 import io.reactivex.rxjava3.core.Single

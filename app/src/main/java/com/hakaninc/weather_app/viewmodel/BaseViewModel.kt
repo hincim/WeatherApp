@@ -1,4 +1,4 @@
-package com.hakaninc.weather_app
+package com.hakaninc.weather_app.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
