@@ -1,34 +1,83 @@
 package com.hakaninc.weather_app.view
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
-import android.media.Image
+import android.location.LocationManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import com.hakaninc.weather_app.R
+import com.hakaninc.weather_app.api.WeatherAPI
 import com.hakaninc.weather_app.databinding.FragmentMainBinding
 import com.hakaninc.weather_app.viewmodel.WeatherViewModel
-import java.time.LocalTime
 import java.util.*
+import kotlin.math.roundToInt
 
-class WeatherFragment : Fragment() {
+class WeatherFragment : Fragment(){
 
+    private var weatherAPI: WeatherAPI? = null
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: WeatherViewModel
     private var currentCondition: Int? = 0
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
+    val lat = MutableLiveData<Double>()
+    val lon = MutableLiveData<Double>()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            getLocation()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getLocation()
+                }
+            }
+        }
+    }
+    private fun getLocation() {
+        val locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            val lastKnownLocation =
+                locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+            if (lastKnownLocation != null) {
+                lat.value = lastKnownLocation.latitude
+                lon.value = lastKnownLocation.longitude
+            }
+        }
     }
 
     override fun onCreateView(
@@ -42,16 +91,18 @@ class WeatherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val drawable: Drawable? = ContextCompat.getDrawable(view.context, R.drawable.night)
+        drawable?.setBounds(10, 100, binding.constraint.width, binding.constraint.height)
+        binding.constraint.background = drawable
+
         viewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
-        viewModel.getData()
+        viewModel.getData(lat.value.toString(),lon.value.toString())
 
         binding.swipe.setOnRefreshListener {
-            viewModel.getData()
+            viewModel.getData(lat.value.toString(),lon.value.toString())
             binding.swipe.isRefreshing = false
         }
-        binding.button.setOnClickListener {
-            Navigation.findNavController(it).navigate(WeatherFragmentDirections.actionMainFragmentToMapsFragment())
-        }
+
 
         binding.weatherError.visibility = View.GONE
         observeLiveData()
@@ -63,8 +114,9 @@ class WeatherFragment : Fragment() {
 
             it?.let {
                 binding.weather = it
-                binding.temp.text = it.main!!.temp.toString().substring(0,2)+"°"
-
+                binding.temp.text = it.main!!.temp?.roundToInt().toString()+"°"
+                currentCondition = it.weather[0].id
+                println(currentCondition)
                 getWeatherDisplayData(viewModel.getApplication())
             }
         }
@@ -98,21 +150,25 @@ class WeatherFragment : Fragment() {
                 val drawable: Drawable? = ContextCompat.getDrawable(context, R.drawable.cloudy)
                 drawable?.setBounds(10, 100, binding.constraint.width, binding.constraint.height)
                 binding.constraint.background = drawable
+                binding.imageViewWeather.setImageResource(R.drawable.cloud)
             }else{
                 val cal = Calendar.getInstance()
                 val hour: Int = cal.get(Calendar.HOUR_OF_DAY)
-                if (hour >= 19 || hour >= 5){
+                if (hour >= 19 || hour <= 5){
                     val drawable: Drawable? = ContextCompat.getDrawable(context, R.drawable.night)
                     drawable?.setBounds(10, 100, binding.constraint.width, binding.constraint.height)
                     binding.constraint.background = drawable
+                    binding.imageViewWeather.setImageResource(R.drawable.moon)
                 }else{
                     val drawable: Drawable? = ContextCompat.getDrawable(context, R.drawable.sunny)
                     drawable?.setBounds(10, 100, binding.constraint.width, binding.constraint.height)
                     binding.constraint.background = drawable
+                    binding.imageViewWeather.setImageResource(R.drawable.sunny_)
                 }
 
             }
         }
 
     }
+
 }

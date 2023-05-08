@@ -1,6 +1,14 @@
 package com.hakaninc.weather_app.viewmodel
 
+import android.Manifest
 import android.app.Application
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
 import com.hakaninc.weather_app.api.WeatherApiService
 import com.hakaninc.weather_app.model.Info
@@ -14,10 +22,10 @@ class WeatherViewModel(application: Application): BaseViewModel(application) {
     private val apiService: WeatherApiService = WeatherApiService()
     private var disposable = CompositeDisposable()
 
+
     val weatherLoading = MutableLiveData<Boolean>()
     val weatherError = MutableLiveData<Boolean>()
     val weatherInfo = MutableLiveData<Info>()
-
 
 
     override fun onCleared() {
@@ -26,12 +34,12 @@ class WeatherViewModel(application: Application): BaseViewModel(application) {
     }
 
 
-    fun getData(){
+    fun getData(lat:String,lon:String){
 
         weatherLoading.value = true
 
         disposable.add(
-            apiService.getData()
+            apiService.getData(lat,lon)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object: DisposableSingleObserver<Info>(){
@@ -50,4 +58,6 @@ class WeatherViewModel(application: Application): BaseViewModel(application) {
                 })
         )
     }
+
+
 }

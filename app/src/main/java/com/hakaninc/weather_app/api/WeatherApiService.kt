@@ -9,13 +9,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 class WeatherApiService {
 
     private val BASE_URL = "https://api.openweathermap.org/"
-    private val api = Retrofit.Builder().baseUrl(BASE_URL)
+    private val api = Retrofit.Builder()
+        .baseUrl(BASE_URL)
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(WeatherAPI::class.java)
 
-    fun getData(): Single<Info>{
-        return api.getWeather()
+    fun getData(lat: String,lon:String): Single<Info>{
+        return api.getWeather(lat,lon)
     }
 }
