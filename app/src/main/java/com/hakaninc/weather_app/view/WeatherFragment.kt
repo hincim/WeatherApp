@@ -6,10 +6,9 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -24,14 +23,13 @@ import kotlin.math.roundToInt
 
 class WeatherFragment : Fragment(){
 
-    private var weatherAPI: WeatherAPI? = null
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: WeatherViewModel
     private var currentCondition: Int? = 0
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
-    val lat = MutableLiveData<Double>()
-    val lon = MutableLiveData<Double>()
-
+    private val lat = MutableLiveData<Double>()
+    private val lon = MutableLiveData<Double>()
+    var city = MutableLiveData<String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +55,7 @@ class WeatherFragment : Fragment(){
             }
         }
     }
+
     private fun getLocation() {
         val locationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -85,6 +84,8 @@ class WeatherFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main,container,false)
+        city.value = arguments?.getString("city").toString()
+        println(city)
         return binding.root
     }
 
@@ -116,7 +117,6 @@ class WeatherFragment : Fragment(){
                 binding.weather = it
                 binding.temp.text = it.main!!.temp?.roundToInt().toString()+"°"
                 currentCondition = it.weather[0].id
-                println(currentCondition)
                 getWeatherDisplayData(viewModel.getApplication())
             }
         }
@@ -170,5 +170,7 @@ class WeatherFragment : Fragment(){
         }
 
     }
+
+
 
 }

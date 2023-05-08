@@ -6,8 +6,9 @@
         <entry key="..\:/kotlinprojeler/weather_app/app/src/main/res/drawable/moon.xml" value="0.1" />
         <entry key="..\:/kotlinprojeler/weather_app/app/src/main/res/drawable/sunny_.xml" value="0.1" />
         <entry key="..\:/kotlinprojeler/weather_app/app/src/main/res/layout/activity_main.xml" value="0.1796875" />
-        <entry key="..\:/kotlinprojeler/weather_app/app/src/main/res/layout/fragment_main.xml" value="0.16666666666666666" />
+        <entry key="..\:/kotlinprojeler/weather_app/app/src/main/res/layout/fragment_main.xml" value="0.14666666666666667" />
         <entry key="..\:/kotlinprojeler/weather_app/app/src/main/res/layout/fragment_maps.xml" value="0.1" />
+        <entry key="..\:/kotlinprojeler/weather_app/app/src/main/res/menu/toolbar_menu.xml" value="0.14666666666666667" />
       </map>
     </option>
   </component>

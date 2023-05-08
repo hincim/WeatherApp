@@ -14,7 +14,7 @@ interface WeatherAPI {
     @GET("data/2.5/weather?&appid=7b6ad88d11b66abc57257ca4417fe2a7&units=metric")
     fun getWeather(
         @Query("lat") lat: String,
-        @Query("lon") lon:String
+        @Query("lon") lon:String,
     ): Single<Info>
 
 
