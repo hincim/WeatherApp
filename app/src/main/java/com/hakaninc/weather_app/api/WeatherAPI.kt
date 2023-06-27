@@ -11,7 +11,7 @@ interface WeatherAPI {
 
     // https://api.openweathermap.org/data/2.5/weather?&appid=7b6ad88d11b66abc57257ca4417fe2a7&units=metric
 
-    @GET("data/2.5/weather?&appid=7b6ad88d11b66abc57257ca4417fe2a7&units=metric")
+    @GET("data/2.5/weather?&appid=................&units=metric")
     fun getWeather(
         @Query("lat") lat: String,
         @Query("lon") lon:String,
