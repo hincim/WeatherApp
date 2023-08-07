@@ -12,10 +12,12 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
 import com.hakaninc.weather_app.api.WeatherApiService
 import com.hakaninc.weather_app.model.Info
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
+import javax.inject.Inject
 
 class WeatherViewModel(application: Application): BaseViewModel(application) {
 

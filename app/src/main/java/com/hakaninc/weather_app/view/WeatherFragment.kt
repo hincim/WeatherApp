@@ -19,6 +19,7 @@ import com.hakaninc.weather_app.api.WeatherAPI
 import com.hakaninc.weather_app.databinding.FragmentMainBinding
 import com.hakaninc.weather_app.viewmodel.WeatherViewModel
 import java.util.*
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
 class WeatherFragment : Fragment(){
